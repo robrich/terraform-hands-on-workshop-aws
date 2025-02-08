@@ -1,0 +1,112 @@
+name: Build & Deploy
+
+on:
+  push:
+    branches:
+    - develop
+    - main
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+env:
+  ENV_NAME: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'develop' && 'dev' || 'unknown' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment:
+      name: ${{ github.ref_name == 'main' && 'prod' || github.ref_name == 'develop' && 'dev' || 'unknown' }}
+
+    steps:
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ vars.AWS_REGION }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+      - name: HashiCorp - Setup Terraform
+        uses: hashicorp/setup-terraform@v2.0.3
+        with:
+          terraform_wrapper: false # don't break terraform output, see https://blog.nillsf.com/index.php/2020/08/25/how-to-use-terraform-output-in-a-github-action/
+          cli_config_credentials_token: ${{ secrets.TERRAFORM_REGISTRY_SECRET }}
+
+      - uses: actions/checkout@v4
+
+      - name: Build & Deploy
+        run: |
+          set -e # stop on error
+
+          # Build the Lambda
+          cd lambda
+          npm install
+          npm run build
+          # TODO: npm run test
+          npm run zip
+          cd ..
+          # now lambda zip file is in ./lambda/dist/terraform-lambda.zip
+          ls -l ./lambda/dist
+
+          #Build the Container
+          cd container
+          export CONTAINER_IMAGE=robrich/terraform-workshop-aws:latest
+          # TODO: swap with your ECR registry
+          #export CONTAINER_IMAGE=123456789012.dkr.ecr.us-east-1.amazonaws.com/terraform-workshop-aws:${{ github.sha }}
+          docker build -t $CONTAINER_IMAGE .
+          # TODO: push to your ECR container registry
+          # docker push $CONTAINER_IMAGE
+          cd ..
+
+          cd terraform
+          # Build terraform.tfvars file
+          echo "tags = {" > terraform.tfvars
+          echo "  \"project\" = \"terraform-workshop\"" >> terraform.tfvars
+          echo "  \"env\"     = \"$ENV_NAME\"" >> terraform.tfvars
+          echo "}" >> terraform.tfvars
+          echo "ENV_NAME = \"$ENV_NAME\"" >> terraform.tfvars
+          echo "LAMBDA_ZIP_FILE = \"../lambda/dist/terraform-lambda.zip\"" >> terraform.tfvars # relative to Terraform folder
+          echo "CONTAINER_IMAGE = \"$CONTAINER_IMAGE\"" >> terraform.tfvars
+          echo "AWS_REGION = \"${{ vars.AWS_REGION }}\"" >> terraform.tfvars
+          cat terraform.tfvars
+
+          terraform init -backend-config="bucket=${{ vars.TERRAFORM_S3_BUCKET }}" \
+                         -backend-config="key=$ENV_NAME/terraform.tfstate" \
+                         -backend-config="region=${{ vars.AWS_REGION }}" \
+                         -backend-config="access_key=${{ secrets.AWS_ACCESS_KEY_ID }}" \
+                         -backend-config="secret_key=${{ secrets.AWS_SECRET_ACCESS_KEY }}" \
+                         -backend-config="encrypt=true" \
+                         -backend-config="use_lockfile=true"
+          terraform apply --auto-approve --var-file="terraform.tfvars"
+
+          unset TF_LOG # disable terraform debug logs that interfere with terraform output
+          terraform output -json > terraform_output.json
+
+          cd ..
+
+          export GATEWAY_URL="$(jq -r '.my_gateway_url.value' ./terraform/terraform_output.json)?id=1"
+          echo "curl the lambda through the api gateway: $GATEWAY_URL"
+          STATUSCODE=$(curl --silent --output /dev/stderr --write-out "%{http_code}" $GATEWAY_URL)
+          if [ "$STATUSCODE" -ne 200 ]; then
+            echo "curl lambda to $GATEWAY_URL failed with status code $STATUSCODE"
+            exit "$STATUSCODE"
+          fi
+
+          export ALB_URL="$(jq -r '.alb_url.value' ./terraform/terraform_output.json)-1"
+          echo "curl the fargate container through the ALB: $ALB_URL"
+          STATUSCODE=$(curl --silent --output /dev/stderr --write-out "%{http_code}" $ALB_URL)
+          if [ "$STATUSCODE" -ne 200 ]; then
+            echo "curl fargate to $ALB_URL failed with status code $STATUSCODE"
+            exit "$STATUSCODE"
+          fi
+
+          cd terraform
+          terraform destroy --auto-approve --var-file="terraform.tfvars"
+          cd ..
+
+      - name: Save terraform_output.json
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: terraform_output
+          path: terraform/terraform_output.json

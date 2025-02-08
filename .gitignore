@@ -1,0 +1,24 @@
+# downloaded files
+node_modules
+
+# built files
+dist
+*.zip
+!02-Apps/*.zip
+**/start/**/*.tf*
+!06-DevOps-Pipeline/start/**/*.tf
+# so they can build a DevOps pipeline
+
+# temp files
+.DS_Store
+*.orig
+
+# user-specific files
+.terraform*
+*.tfstate*
+*override.tf
+package-lock.json
+demo2
+
+# secrets
+.env

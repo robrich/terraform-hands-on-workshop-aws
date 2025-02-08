@@ -1,0 +1,5 @@
+# copy this file to providers_override.tf to debug locally
+terraform {
+  backend "local" {
+  }
+}

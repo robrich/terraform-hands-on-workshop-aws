@@ -1,0 +1,19 @@
+# downloaded files
+node_modules
+
+# built files
+dist
+
+# temp files
+.DS_Store
+
+# user-specific files
+package-lock.json
+
+# secrets
+.env
+
+# non-production files
+.dockerignore
+Dockerfile
+build.sh

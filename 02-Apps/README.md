@@ -68,7 +68,7 @@ You can definitely build the image if you'd like.  But for simplicity's sake, we
 
 2. Look through the [Express.js](https://expressjs.com/) app.
 
-   - `rc/app.ts` is the app startup code.
+   - `src/app.ts` is the app startup code.
 
    - `src/routes/api` folder has the routes that queries DynamoDB.
 

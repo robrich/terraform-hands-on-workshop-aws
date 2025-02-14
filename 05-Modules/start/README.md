@@ -281,7 +281,8 @@ Let's create a local module that builds a Node.js Lambda function together with 
 
     - ~~`aws_lambda_function.api_lambda`~~ to `module.api_lambda`
     - ~~`aws_iam_role.api_lambda_role.name`~~ to `module.api_lambda.role_name`
-
+    - ~~`aws_lambda_function.api_lambda.invoke_arn`~~ to `module.api_lambda.lambda_invoke_arn`
+   
 12. If we had other references to the lambda, we could modify them to the new module as well.
 
 13. If we had many lambdas, we could now call this new lambda module from many places in the outer folder.  Or we could create an array of lambda functions and use [`for_each`](https://developer.hashicorp.com/terraform/language/meta-arguments/for_each) to construct multiple lambdas from this same module.

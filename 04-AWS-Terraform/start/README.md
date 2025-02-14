@@ -222,7 +222,7 @@ The Random provider allows us to create a random string.  In real projects, dete
     }
     ```
 
-    See the backend docs at https://developer.hashicorp.com/teraform/language/settings/backends/local
+    See the backend docs at https://developer.hashicorp.com/terraform/language/backend/local
 
 16. Because we've modified a provider or module, we'll need to re-run initialization.
 
@@ -772,7 +772,7 @@ With the Lambda setup, there's a few more pieces we'll need to put in place.  He
 
 6. Let's add the local variables.
 
-   Open `locals.tf` and add the following before the ending `}`:
+   Open `locals.tf` and add the following into the locals block:
 
    ```terraform
      lambda_name = "api-lambda-${var.ENV_NAME}-${local.randomness}"
@@ -884,6 +884,8 @@ When we were doing Click-Ops in Chapter 2, we had to do a lot of pieces to get t
    Note the new outputs showing the created resources.
 
    **Note:**: If Terraform failed, look at the console output for clues.  Is there a typo in the Terraform code?  Did you save all the files?  Is the console in the right directory?  As a last resort, diff the `start` and `done` folders looking for clues.
+
+   **Note**: There's a warning about a deprecated argument in aws_api_gateway_deployment.  You can safely ignore that for now.
 
 7. Let's look in the AWS Console at the resources created.
 

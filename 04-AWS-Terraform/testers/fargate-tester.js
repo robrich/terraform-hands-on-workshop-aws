@@ -36,7 +36,7 @@ async function getHomepage() {
 }
 
 async function get(id) {
-  const url = `${alb_url}/api/${encodeURIComponent(id)}`;
+  const url = `${alb_url}/${encodeURIComponent(id)}`;
   try {
     const res = await axios.get(url, {
       headers: {
@@ -50,7 +50,7 @@ async function get(id) {
 }
 
 async function update(id, body) {
-  const url = `${alb_url}/api/${encodeURIComponent(id)}`;
+  const url = `${alb_url}/${encodeURIComponent(id)}`;
   try {
     const res = await axios.post(url, body, {
       headers: {
@@ -64,7 +64,7 @@ async function update(id, body) {
 }
 
 async function getAll() {
-  const url = `${alb_url}/api`;
+  const url = `${alb_url}`;
   try {
     const res = await axios.get(url, {
       headers: {

@@ -255,37 +255,37 @@ See also the official [AWS CLI instructions](https://docs.aws.amazon.com/cli/lat
 
    **Note**: These config values get saved into `~/.aws/config` and `~/.aws/credentials`.  `~` represents your home directory.  On Windows this is `C:\Users\YOUR_NAME` and on Mac and Linux this is `/home/YOUR_NAME`.  You should back up the `.aws` directory.
 
-3. Verify you're logged in correctly:
+10. Verify you're logged in correctly:
 
-   ```sh
-   aws sts get-caller-identity --profile training
-   ```
+    ```sh
+    aws sts get-caller-identity --profile training
+    ```
 
-   In the console output, ensure the `Account` is the account you expected.  If it isn't, return to the top of this section and try logging in again.
+    In the console output, ensure the `Account` is your user that you selected above.  If it isn't, return to the top of this section and try logging in again.
 
-4. Export the current profile as an environment variable.
+11. Export the current profile as an environment variable.
 
-   In Mac and Linux:
+    In Mac and Linux:
 
-   ```sh
-   export AWS_PROFILE="training"
-   ```
+    ```sh
+    export AWS_PROFILE="training"
+    ```
 
-   In Windows PowerShell:
+    In Windows PowerShell:
 
-   ```powershell
-   $env:AWS_PROFILE = "training"
-   ```
+    ```powershell
+    $env:AWS_PROFILE = "training"
+    ```
 
-   In Windows Command Prompt:
+    In Windows Command Prompt:
 
-   ```sh
-   set AWS_PROFILE=training
-   ```
+    ```sh
+    set AWS_PROFILE=training
+    ```
 
-   **Pro-tip**: This is easier than passing in the profile to every AWS CLI command.
+    **Pro-tip**: This is easier than passing in the profile to every AWS CLI command.
 
-   **WARNING**: You'll need to re-export the `AWS_PROFILE` environment variable in each terminal.  If you close and re-open a shell, you'll need to re-run the above command.
+    **WARNING**: You'll need to re-export the `AWS_PROFILE` environment variable in each terminal.  If you close and re-open a shell, you'll need to re-run the above command.
 
 
 ### SSO

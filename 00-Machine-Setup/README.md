@@ -133,7 +133,7 @@ Login to AWS Website
 
 2. Click on the appropriate icon for AWS.
 
-3. Login with the appripriate corporate credentials.
+3. Login with the appropriate corporate credentials.
 
 4. You'll now see the AWS website with the AWS logo at the top-left.
 

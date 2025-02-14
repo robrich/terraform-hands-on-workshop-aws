@@ -68,7 +68,7 @@ We'll start this chapter where the previous chapter leaves off.
 
    Copy all files from `04-AWS-Terraform/start/terraform` into `05-Modules/start/terraform`.
 
-   Copy all files from `04-AWS-Terraform/start/artifacts` into `54-Modules/start/artifacts`.
+   Copy all files from `04-AWS-Terraform/start/artifacts` into `05-Modules/start/artifacts`.
 
 3. Remove all the Terraform state files:
 
@@ -208,8 +208,8 @@ Let's create a local module that builds a Node.js Lambda function together with 
 
 6. inside the `lambda` folder inside `lambda.tf` adjust the other references from `local.` and `dynamodb_table.arn` to these variables in `var.tf`.  You'll need to replace these references:
 
-   - ~~`local.lambda_name`~~ becomes `var.function_name`
-   - ~~`aws_dynamodb_table.dynamodb_table.arn`~~ becomes `var.dynamodb_arn`
+   - Change ~~`local.lambda_name`~~ to `var.function_name`
+   - Change ~~`aws_dynamodb_table.dynamodb_table.arn`~~ to `var.dynamodb_arn`
 
 7. Inside the `lambda` folder, create a new `output.tf` file and add this:
 
@@ -690,7 +690,7 @@ Let's publish the Lambda module to GitHub so we can use it in our private Terraf
 
    This module abstracts the details of creating an AWS Lambda function into a simpler, opinionated interface.
 
-   This is part of the [Terraform Hands-on Workshop](https://github.com/robrich/terraforrm-hands-on-workshop-aws).
+   This is part of the [Terraform Hands-on Workshop](https://github.com/robrich/terraform-hands-on-workshop-aws).
 
    License
    -------

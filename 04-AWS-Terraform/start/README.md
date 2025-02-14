@@ -793,7 +793,7 @@ With the Lambda setup, there's a few more pieces we'll need to put in place.  He
 
    b. Inside Chapter 2, inside apps/lambda, run `build.sh` or `./build.ps1` if you haven't yet.
 
-   c. Copy Chapter 2's `lambda/dist/terraform-lambda.zip` into Chapter 3's `start/artifacts` directory.
+   c. Copy Chapter 2's `lambda/dist/terraform-lambda.zip` into Chapter 4's `start/artifacts` directory.
 
    Now the zip file exists so Terraform can deploy it to AWS.
 
@@ -1032,7 +1032,7 @@ Let's build each one.
 
    In the previous role the service assumed was ~~`lambda.amazonaws.com`~~.  In this role we'll assume the service `ecs-tasks.amazonaws.com`.
 
-6. In output.tf, output `fargate_role`'s ARN.
+6. In `output.tf`, output `fargate_role`'s ARN.
 
 7. Run Terraform fmt, Terraform validate, and Terraform apply commands in the `start/terraform` directory with the standard parameters.  Note the error:
 
@@ -1426,7 +1426,7 @@ Now that we have the Fargate container running and the ALB in front, let's take 
 
 4. Optional: If you have Node.js installed, you can now successfully run the Lambda too.
 
-   a. Open `lambda-tester.js` in a text editor, and modify `dynamo_pk` to match the choice you made in `fargate_tester.js`.
+   a. Open `lambda-tester.js` in a text editor, and modify `dynamo_pk` to match the choice you made in `fargate-tester.js`.
 
    b. In the terminal run this:
 

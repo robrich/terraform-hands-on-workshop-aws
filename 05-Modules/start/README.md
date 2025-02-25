@@ -87,7 +87,7 @@ We'll start this chapter where the previous chapter leaves off.
    - alb.tf
    - network-opt*.tf
 
-   Remove references to Fargate and ALB from `output.tf` and `vars.tf`.
+   Remove references to Fargate and ALB from `output.tf` and `locals.tf`.
 
 5. Run Terraform init, Terraform fmt, and terraform validate to ensure we've got the folder free from typos.
 
@@ -282,7 +282,7 @@ Let's create a local module that builds a Node.js Lambda function together with 
     - ~~`aws_lambda_function.api_lambda`~~ to `module.api_lambda`
     - ~~`aws_iam_role.api_lambda_role.name`~~ to `module.api_lambda.role_name`
     - ~~`aws_lambda_function.api_lambda.invoke_arn`~~ to `module.api_lambda.lambda_invoke_arn`
-   
+
 12. If we had other references to the lambda, we could modify them to the new module as well.
 
 13. If we had many lambdas, we could now call this new lambda module from many places in the outer folder.  Or we could create an array of lambda functions and use [`for_each`](https://developer.hashicorp.com/terraform/language/meta-arguments/for_each) to construct multiple lambdas from this same module.
@@ -356,7 +356,7 @@ Lambda Module
 6. In the `dynamodb_policy` folder, in `vars.tf`, replace the contents of the file with this:
 
    ```terraform
-      variable "policy_name" {
+   variable "policy_name" {
      type        = string
      description = "The name of the Policy resource"
    }
@@ -370,7 +370,7 @@ Lambda Module
 7. In the `dynamodb_policy` folder, in `output.tf`, replace the contents of the file with this:
 
    ```terraform
-      output "policy_arn" {
+   output "policy_arn" {
      value = aws_iam_policy.api_lambda_policy.arn
    }
    ```
@@ -379,7 +379,7 @@ Lambda Module
 
    ```terraform
    module "dynamodb_policy" {
-     source = "./dynamodb-policy"
+     source = "./dynamodb_policy"
 
      policy_name = "${local.lambda_name}-policy"
      dynamodb_arn = aws_dynamodb_table.dynamodb_table.arn
@@ -532,7 +532,7 @@ Let's refactor `api_gateway.tf` into a module as well.  An API Gateway sprawls t
 
 6. Also inside `api_gateway_route.tf`, modify references to `my_gateway` and `module.api_lambda` to use the new vars from `vars.tf`.
 
-7. Back outside the module, open the old `api_gateway.tf` and delete all lines starting with `resource "aws_api_gateway_resource" "root"`.
+7. Back outside the module, open the old `api_gateway.tf`, and starting with the line `resource "aws_api_gateway_resource" "root"`, delete the rest of the lines in the file.
 
    We'll replace these with the module.
 

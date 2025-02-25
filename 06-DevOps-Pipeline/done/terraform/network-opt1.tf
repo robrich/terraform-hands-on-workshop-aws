@@ -13,6 +13,10 @@
 ################################################################################
 
 
+locals {
+  availability_zone_count = 2 # must be 2 or more
+}
+
 # Fetch AZs in the current region
 data "aws_availability_zones" "available" {
 }

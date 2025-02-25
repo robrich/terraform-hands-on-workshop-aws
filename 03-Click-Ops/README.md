@@ -78,7 +78,9 @@ DynamoDB will be the data store in our cloud architecture.  Here's the full diag
 9. In the Tags section:
 
    a. click `Add a new tag`
+
    b. In the name field type in `project`
+
    c. In the value field type in your name
 
    ![Tags](./img/dynamodb-tags.png)
@@ -301,7 +303,7 @@ The Lambda is part of our cloud-native solution.  Here's the full architecture:
 
 53. Did the Lambda succeed?  Open up the test result details to see.
 
-    **Note:** There's no data in the database, so we'll likely get an HTTP 200, and in the JSON response, an empty `data` section and `"valid":false`.
+    **Note:** There's no data in the database, so we'll likely get an HTTP 404, and in the JSON response, an empty `data` section and `"valid":false`.
 
     **Tip:** Did you get a permission error?  Double-check the Lambda is assigned to the role, the role is assigned to the policy, and the policy has both the correct permissions, and the correct DynamoDB table ARN followed by `/*`.
 

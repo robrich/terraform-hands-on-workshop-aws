@@ -213,7 +213,7 @@ The Random provider allows us to create a random string.  In real projects, dete
       required_providers {
         random = {
           source  = "hashicorp/random"
-          version = "~>3.6"
+          version = "~>3.7"
         }
       }
 
@@ -281,12 +281,12 @@ Now that we got our feet wet with Terraform, let's build some AWS resources.
      required_providers {
        random = {
          source  = "hashicorp/random"
-         version = "~>3.6"
+         version = "~>3.7"
        }
 
        aws = {
          source  = "hashicorp/aws"
-         version = "~> 5.83"
+         version = "~> 5.88"
        }
      }
 

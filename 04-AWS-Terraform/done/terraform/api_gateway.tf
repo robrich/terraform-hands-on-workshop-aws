@@ -20,11 +20,15 @@ resource "aws_api_gateway_deployment" "my_gateway" {
   ]
   rest_api_id = aws_api_gateway_rest_api.my_gateway.id
 
-  stage_name = "default"
-
   lifecycle {
     create_before_destroy = true
   }
+}
+
+resource "aws_api_gateway_stage" "my_gateway" {
+  deployment_id = aws_api_gateway_deployment.my_gateway.id
+  rest_api_id   = aws_api_gateway_rest_api.my_gateway.id
+  stage_name    = "default"
 }
 
 resource "aws_api_gateway_resource" "root" {

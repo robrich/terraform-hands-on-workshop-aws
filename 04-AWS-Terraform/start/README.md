@@ -92,7 +92,7 @@ The Random provider allows us to create a random string.  In real projects, dete
      required_providers {
        random = {
          source  = "hashicorp/random"
-         version = "~>3.6"
+         version = "~>3.7"
        }
      }
    }
@@ -667,21 +667,19 @@ With the Lambda setup, there's a few more pieces we'll need to put in place.  He
    # the role to run the lambda
    resource "aws_iam_role" "api_lambda_role" {
      name               = "${local.lambda_name}-role"
-     assume_role_policy = <<EOF
-   {
-     "Version": "2012-10-17",
-     "Statement": [
-       {
-         "Action": "sts:AssumeRole",
-         "Principal": {
-           "Service": "lambda.amazonaws.com"
-         },
-         "Effect": "Allow",
-         "Sid": ""
-       }
-     ]
-   }
-   EOF
+     assume_role_policy = jsonencode({
+       "Version": "2012-10-17",
+        "Statement": [
+        {
+          "Action": "sts:AssumeRole",
+          "Principal": {
+            "Service": "lambda.amazonaws.com"
+          },
+          "Effect": "Allow",
+          "Sid": ""
+        }
+        ]
+     })
    }
    ```
 
@@ -695,38 +693,37 @@ With the Lambda setup, there's a few more pieces we'll need to put in place.  He
    resource "aws_iam_policy" "api_lambda_policy" {
      name   = "${local.lambda_name}-policy"
      path   = "/"
-     policy = <<EOF
-   {
-     "Version": "2012-10-17",
-     "Statement": [
-       {
-         "Action": [
-           "logs:CreateLogGroup",
-           "logs:CreateLogStream",
-           "logs:PutLogEvents"
-         ],
-         "Resource": "arn:aws:logs:*:*:*",
-         "Effect": "Allow"
-       },{
-         "Sid": "DynamoDBTableAccess",
-         "Effect": "Allow",
-         "Action": [
-           "dynamodb:BatchGetItem",
-           "dynamodb:BatchWriteItem",
-           "dynamodb:ConditionCheckItem",
-           "dynamodb:PutItem",
-           "dynamodb:DescribeTable",
-           "dynamodb:DeleteItem",
-           "dynamodb:GetItem",
-           "dynamodb:Scan",
-           "dynamodb:Query",
-           "dynamodb:UpdateItem"
-         ],
-         "Resource": "${aws_dynamodb_table.dynamodb_table.arn}"
-       }
-     ]
-   }
-   EOF
+     policy = jsonencode({
+       "Version": "2012-10-17",
+       "Statement": [
+         {
+           "Action": [
+             "logs:CreateLogGroup",
+             "logs:CreateLogStream",
+             "logs:PutLogEvents"
+           ],
+           "Resource": "arn:aws:logs:*:*:*",
+           "Effect": "Allow"
+         },
+         {
+           "Sid": "DynamoDBTableAccess",
+           "Effect": "Allow",
+           "Action": [
+             "dynamodb:BatchGetItem",
+             "dynamodb:BatchWriteItem",
+             "dynamodb:ConditionCheckItem",
+             "dynamodb:PutItem",
+             "dynamodb:DescribeTable",
+             "dynamodb:DeleteItem",
+             "dynamodb:GetItem",
+             "dynamodb:Scan",
+             "dynamodb:Query",
+             "dynamodb:UpdateItem"
+           ],
+           "Resource": "${aws_dynamodb_table.dynamodb_table.arn}"
+         }
+       ]
+     })
    }
 
    # connect role and policy
@@ -872,7 +869,7 @@ When we were doing Click-Ops in Chapter 2, we had to do a lot of pieces to get t
 
    ```terraform
    output "my_gateway_url" {
-     value = "${aws_api_gateway_deployment.my_gateway.invoke_url}/${aws_api_gateway_resource.root.path_part}"
+     value = "${aws_api_gateway_deployment.my_gateway.invoke_url}/${aws_api_gateway_resource}${aws_api_gateway_resource.root.path_part}"
      # https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-call-api.html
    }
    ```
@@ -1175,6 +1172,8 @@ What's the difference?  Option 2 assumes these things already exist and queries 
 3. Copy your chosen file to the `start/terraform` folder.
 
 4. Open this file, let your eyes glaze over, and be thankful it's already done.  😊
+
+If you chose `network-opt1.tf`, define a local `availability_zone_count = 2`.
 
 
 Application Load Balancer (ALB)

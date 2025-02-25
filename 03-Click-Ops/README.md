@@ -177,7 +177,7 @@ The Lambda is part of our cloud-native solution.  Here's the full architecture:
 
 16. On the bottom-right, click `Save`.
 
-17. Scroll down to `Runtime settings`, and select the `Edit` button on the right.
+17. Switch to the `Code` tab, scroll down to `Runtime settings`, and select the `Edit` button on the right.
 
 18. Change `Handler` to `app.dynamoDbQueryHandler`.
 
@@ -321,66 +321,68 @@ Here's the Architecture diagram showing the API Gateway exploded view:
 
 2. In the far left menu choose `APIs` if you're not there already.
 
-3. On the right, find the HTTP API section and click `Build`.
+3. On the top-right, click `Create API`.
 
-4. Click the `Add integration` button.
+4. On the right, find the HTTP API section and click `Build`.
 
-5. In drop-down, choose `Lambda` from the list.
+5. Click the `Add integration` button.
 
-6. In the Lambda function section, choose your Lambda created above.
+6. In drop-down, choose `Lambda` from the list.
+
+7. In the Lambda function section, choose your Lambda created above.
 
    ![API Gateway creation](./img/api-gateway-create.png)
 
-7. Enter a descriptive name.  Add your name to make it easy to find later.
+8. Enter a descriptive name.  Add your name to make it easy to find later.
 
    **Tip:** API Gateway names can include any characters, but it's best practice to only use lower-case letters, numbers, and underscores, avoiding ~~spaces~~, ~~upper-case letters~~, ~~special characters~~, and ~~emoji~~.
 
-8. Click `Next` to configure routes.
+9. Click `Next` to configure routes.
 
-9. In the `Configure Routes section`, set the following parameters:
+10. In the `Configure Routes section`, set the following parameters:
 
-   - Set `Method` to `GET`
-   - Set `Resource Path` to `/api`
+    - Set `Method` to `GET`
+    - Set `Resource Path` to `/api`
 
-   ![Configure Routes](./img/api-gateway-routes.png)
+    ![Configure Routes](./img/api-gateway-routes.png)
 
-10. Click `Next` to configure stages.
+11. Click `Next` to configure stages.
 
-11. Leave the Stages settings with the defaults.
+12. Leave the Stages settings with the defaults.
 
     **Tip:** This magic `$default` stage auto-deploys any changes.  This removes another button to click any time you make a change to the API Gateway configuration.
 
-12. Click `Next` to review and create.
+13. Click `Next` to review and create.
 
-13. Click the `Create` button.
+14. Click the `Create` button.
 
-14. This wizard did a lot of magic for us.  Let's take a look at the Lambda and see the configuration it put in place.
+15. This wizard did a lot of magic for us.  Let's take a look at the Lambda and see the configuration it put in place.
 
     Use the search box in the top-left to switch to Lambda, and open your Lambda function.
 
-15. Note the API Gateway trigger in the diagram at the top.
+16. Note the API Gateway trigger in the diagram at the top.
 
     ![Lambda has API Gateway trigger](./img/api-gateway-trigger-in-lambda.png)
 
-16. In the middle, switch to the `Configuration` tab then the `Triggers` page.
+17. In the middle, switch to the `Configuration` tab then the `Triggers` page.
 
     Note the API Gateway trigger.
 
-17. Open the `Details` tab and look at all the API Gateway configuration details.
+18. Open the `Details` tab and look at all the API Gateway configuration details.
 
     ![API Gateway trigger details](./img/api-gateway-trigger-in-lambda-detail.png)
 
-18. In the `Configuration` tab, switch to the `Permissions` page on the left.
+19. In the `Configuration` tab, switch to the `Permissions` page on the left.
 
-19. Scroll down to the `Resource-based policy statements` section and click `View policy`.
+20. Scroll down to the `Resource-based policy statements` section and click `View policy`.
 
     Note that the new policy that allows API Gateway has permission to execute the Lambda.
 
-20. Now let's examine some of the pieces auto-generated in API Gateway.
+21. Now let's examine some of the pieces auto-generated in API Gateway.
 
     Using the Search bar on the top-left, switch to `API Gateway` and select your gateway.
 
-21. On the left, in the `Develop` section, click through each of the tabs:
+22. On the left, in the `Develop` section, click through each of the tabs:
 
     - Routes
     - Integrations
@@ -389,9 +391,9 @@ Here's the Architecture diagram showing the API Gateway exploded view:
 
     Note: We also didn't configure CORS.  If a React or Vue app connected from a different domain or sub-domain, we'd need to configure it here.
 
-22. In the `Deploy` section switch to the `Stages` page.
+23. In the `Deploy` section switch to the `Stages` page.
 
-23. In the center, select the `$default` stage.
+24. In the center, select the `$default` stage.
 
     ![API Gateway Stage Details](./img/api-gateway-stage-details.png)
 
@@ -604,11 +606,17 @@ Wow, that was a long way to go to create a role and policy.  Let's create a task
 
    ![Container Environment Variables](./img/fargate-environment-variables.png)
 
-8. Optional: Scroll down and open the Tags section and add many descriptive tags.
+8. Still in the Container section, open `Logging` and uncheck `Use log collection`.
+
+   The container doesn't have permission to write to CloudWatch, so with logs enabled, the deployment would fail.
+
+   **Best Practice**: In a real scenario we definitely want logs.  So we'd leave this check-box checked, and add CloudWatch write permissions to the IAM policy instead.
+
+9. Optional: Scroll down and open the Tags section and add many descriptive tags.
 
    **Pro Tip:** You can search AWS resources for matching tags.  This can be a great way to discover resources.  Once you find a resource, open the tags to learn more about who to contact or what version of the software is deployed.
 
-9. Scroll all the way to the bottom of the page and click `Create`.
+10. Scroll all the way to the bottom of the page and click `Create`.
 
 
 ### ECS Service

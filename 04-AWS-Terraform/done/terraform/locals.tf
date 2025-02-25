@@ -12,7 +12,6 @@ locals {
   fargate_log_retention_days = 7
   alb_public_port            = 80
   alb_name                   = "alb-${var.ENV_NAME}-${local.randomness}"
-  availability_zone_count    = 2 # must be 2 or more
   environment_variables = {
     "DYNAMODB_TABLE" : local.dynamodb_table_name,
     "ENV_NAME" : var.ENV_NAME

@@ -22,6 +22,8 @@ Terraform
 
 - [Terraform Workspace Best Practices](https://developer.hashicorp.com/terraform/cloud-docs/workspaces/best-practices)
 
+- Book: [Terraform up and running](https://www.terraformupandrunning.com/)
+
 
 AWS
 ---

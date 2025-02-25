@@ -1,0 +1,15 @@
+# downloaded files
+
+# built files
+
+# temp files
+.DS_Store
+*.orig
+
+# user-specific files
+.terraform*
+*.tfstate*
+*override.tf
+
+# secrets
+.env

@@ -87,7 +87,7 @@ We'll start this chapter where the previous chapter leaves off.
    - alb.tf
    - network-opt*.tf
 
-   Remove references to Fargate and ALB from `output.tf` and `vars.tf`.
+   Remove references to Fargate and ALB from `output.tf` and `locals.tf`.
 
 5. Run Terraform init, Terraform fmt, and terraform validate to ensure we've got the folder free from typos.
 
@@ -282,7 +282,7 @@ Let's create a local module that builds a Node.js Lambda function together with 
     - ~~`aws_lambda_function.api_lambda`~~ to `module.api_lambda`
     - ~~`aws_iam_role.api_lambda_role.name`~~ to `module.api_lambda.role_name`
     - ~~`aws_lambda_function.api_lambda.invoke_arn`~~ to `module.api_lambda.lambda_invoke_arn`
-   
+
 12. If we had other references to the lambda, we could modify them to the new module as well.
 
 13. If we had many lambdas, we could now call this new lambda module from many places in the outer folder.  Or we could create an array of lambda functions and use [`for_each`](https://developer.hashicorp.com/terraform/language/meta-arguments/for_each) to construct multiple lambdas from this same module.
@@ -356,7 +356,7 @@ Lambda Module
 6. In the `dynamodb_policy` folder, in `vars.tf`, replace the contents of the file with this:
 
    ```terraform
-      variable "policy_name" {
+   variable "policy_name" {
      type        = string
      description = "The name of the Policy resource"
    }
@@ -370,7 +370,7 @@ Lambda Module
 7. In the `dynamodb_policy` folder, in `output.tf`, replace the contents of the file with this:
 
    ```terraform
-      output "policy_arn" {
+   output "policy_arn" {
      value = aws_iam_policy.api_lambda_policy.arn
    }
    ```
@@ -379,7 +379,7 @@ Lambda Module
 
    ```terraform
    module "dynamodb_policy" {
-     source = "./dynamodb-policy"
+     source = "./dynamodb_policy"
 
      policy_name = "${local.lambda_name}-policy"
      dynamodb_arn = aws_dynamodb_table.dynamodb_table.arn
@@ -532,7 +532,7 @@ Let's refactor `api_gateway.tf` into a module as well.  An API Gateway sprawls t
 
 6. Also inside `api_gateway_route.tf`, modify references to `my_gateway` and `module.api_lambda` to use the new vars from `vars.tf`.
 
-7. Back outside the module, open the old `api_gateway.tf` and delete all lines starting with `resource "aws_api_gateway_resource" "root"`.
+7. Back outside the module, open the old `api_gateway.tf`, and starting with the line `resource "aws_api_gateway_resource" "root"`, delete the rest of the lines in the file.
 
    We'll replace these with the module.
 
@@ -683,7 +683,17 @@ Let's publish the Lambda module to GitHub so we can use it in our private Terraf
    - Rename ~~`vars.tf`~~ to `variables.tf`
    - Rename ~~`output.tf`~~ to `outputs.tf`
 
-4. Create a new file named `README.md` and add this content to it:
+4. Create a new file named `.gitignore` and add these ignore patterns:
+
+   ```
+   .terraform*
+   *.tfstate*
+   .DS_Store
+   ```
+
+   You may also choose to ignore other files according to your preferences.
+
+5. Create a new file named `README.md` and add this content to it:
 
    ```md
    Terraform Module for AWS Lambda
@@ -701,7 +711,7 @@ Let's publish the Lambda module to GitHub so we can use it in our private Terraf
 
    Yes, in a production module you would include example usage code and much more descriptive content.  As we're learning about the Terraform private registry, this implementation detail is less important.
 
-5. Open a new terminal window inside the `terraform-aws-lambda` folder created above and run this:
+6. Open a new terminal window inside the `terraform-aws-lambda` folder created above and run this:
 
     ```sh
     git init
@@ -711,37 +721,37 @@ Let's publish the Lambda module to GitHub so we can use it in our private Terraf
     git tag 0.0.1
     ```
 
-6. Open a new browser window to https://github.com/ and login if not already.
+7. Open a new browser window to https://github.com/ and login if not already.
 
-7. On the very top-right, click your profile icon or name, and choose `profile` to switch to your page.
+8. On the very top-right, click your profile icon or name, and choose `profile` to switch to your page.
 
-8. Click the `Repositories` tab to switch to this page.
+9. Click the `Repositories` tab to switch to this page.
 
-9. On the top-right, click the `New` button.
+10. On the top-right, click the `New` button.
 
-10. Set the `Repository name` to `terraform-aws-lambda`.
+11. Set the `Repository name` to `terraform-aws-lambda`.
 
     **IMPORTANT**: The repository name must match the [Terraform requirements](https://developer.hashicorp.com/terraform/cloud-docs/registry/publish-modules#preparing-a-module-repository).  It must be `terraform-aws-...` including only lower-case letters and dashes.
 
     ![GitHub Repository settings](./img/github-repository-settings.png)
 
-11. Optional: set the Description to a descriptive message.
+12. Optional: set the Description to a descriptive message.
 
     ```txt
     Terraform Workshop: AWS Lambda module
     ```
 
-12. Mark the module `Private`.
+13. Mark the module `Private`.
 
-13. Do **NOT** add a ~~README~~, ~~.gitignore~~ or ~~license~~.
+14. Do **NOT** add a ~~README~~, ~~.gitignore~~ or ~~license~~.
 
-14. Scroll down and on the bottom-right, click `Create repository`.
+15. Scroll down and on the bottom-right, click `Create repository`.
 
-15. On the right, click the copy button to copy the GitHub repository URL.
+16. On the right, click the copy button to copy the GitHub repository URL.
 
     ![Copy the GitHub repository URL](./img/github-repository-url.png)
 
-16. In the terminal window inside the `terraform-aws-lambda` folder created above, run this:
+17. In the terminal window inside the `terraform-aws-lambda` folder created above, run this:
 
     ```sh
     git remote add origin https://github.com/YOUR_REPO_HERE
@@ -749,13 +759,13 @@ Let's publish the Lambda module to GitHub so we can use it in our private Terraf
 
     Make sure to paste your GitHub repository URL in place.
 
-17. In the terminal, run this:
+18. In the terminal, run this:
 
     ```sh
     git push -u origin main --tags
     ```
 
-18. In the browser for this GitHub repository, refresh the page, and verify you now have files in the repository.
+19. In the browser for this GitHub repository, refresh the page, and verify you now have files in the repository.
 
 
 ### Publish the Module to Terraform Private Registry

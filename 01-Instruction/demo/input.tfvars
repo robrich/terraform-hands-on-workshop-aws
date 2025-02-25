@@ -2,7 +2,7 @@ tags = {
   "project" = "terraform-workshop",
   "env"     = "rob"
 }
-ENV_NAME       = "rob"
+ENV_NAME        = "rob"
 LAMBDA_ZIP_FILE = "artifacts/terraform-lambda.zip"
 
 # TODO: must set as terminal env var:

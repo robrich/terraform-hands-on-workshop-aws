@@ -1,7 +1,4 @@
 
-# FRAGILE: the DevOps template sets all TFVars as environment variables, Terraform is case-sensitive, and so all these must be upper-case
-
-# except this magic one which is lower-case for some reason
 variable "tags" {
   type    = map(string)
   default = {}

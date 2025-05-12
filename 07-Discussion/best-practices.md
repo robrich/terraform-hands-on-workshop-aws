@@ -19,9 +19,9 @@ Terraform Tips and Best Practices
 
   We're separating concerns and validating each piece in isolation.
 
-- Use the [Terraform Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs).  The docs are your best friend.
+- Use the [Terraform Docs](https://registry.terraform.io/providers/hashicorp/aws/latest/docs).  The docs are your best friend.  Note that input variables are named "Arguments", and output variables are named "Attributes".
 
-- Naming: It's best to name all resources using only use lower-case letters, numbers, and underscores.  Avoid ~~spaces~~, ~~upper-case letters~~, ~~special characters~~, and ~~emoji~~ as some services don't like unusual names.  Even if the service you're using does support these characters, other services referencing this name may not.
+- Naming: It's best to name all resources using only use lower-case letters, numbers, and underscores.  Avoid ~~spaces~~, ~~upper-case letters~~, ~~special characters~~, and ~~emoji~~ as some services don't like unusual names.  Even if the service you're using does support these characters, other services referencing this name may not.  Some resources have naming limits, so avoid things that are too name in nested variables.
 
 - Google It: Don’t hesitate to search the Terraform documentation if you’re stuck.
 
@@ -48,6 +48,14 @@ Terraform Tips and Best Practices
 - Terraform modules: Be careful to include only quality, trusted, and supported modules in your Terraform code.  It could be easy to depend on an unsupported module that never receives security updates, making your system vulnerable.
 
 - Ensure a unique state file per environment.  Never run terraform apply with a local state into the same AWS account that has S3-backed state files.  At best you'll get duplicated resources.  Probably you'll get a corrupt Terraform state file.
+
+- Move common configuration to a config store like Azure App Configuration or Hashicorp Vault.  Then the app or Terraform module can pull the config from the store.  This practice makes the tfvars file smaller, and eliminates prop-drilling in Terraform files and modules.
+
+- Modules: it's easy to reach for modules too early.  Use the standard resources first until you're comfortable.
+
+- Tags are your friend.  Be as verbose as possible when tagging resources.  It makes it easy to find your resources, bill-back resources to other departments, and discover related resources in a project.
+
+- Use development best practices with Terraform code too.  Pull requests, merge approvers, etc.  Terraform code is still code.
 
 
 Security

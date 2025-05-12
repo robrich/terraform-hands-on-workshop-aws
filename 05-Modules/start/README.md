@@ -178,7 +178,7 @@ Let's create a local module that builds a Node.js Lambda function together with 
 
 5. Now let's modify `lambda.tf` to use these module parameters.
 
-   Inside the `lambda` folder, open `lambda.tf` and modify it to this:
+   Inside the `lambda` folder, open `lambda.tf` and modify the lambda definition to this:
 
    ```terraform
    resource "aws_lambda_function" "api_lambda" {
@@ -592,9 +592,9 @@ If you already have a Terraform registry setup, you can login to your account an
 
 See the official instructions at https://developer.hashicorp.com/terraform/tutorials/cloud-get-started/cloud-sign-up#create-an-account
 
-1. Open a browser and head to https://www.hashicorp.com/products/terraform
+1. Open a browser and login to https://app.terraform.io/
 
-2. In the top-right, click `Sign up for free`.
+2. At the bottom, click `Create your free account`.
 
 3. Enter a unique username, your email, and a password, and click `Create account`.
 

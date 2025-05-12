@@ -36,6 +36,8 @@ AWS
 
 - [List of AWS Regions](https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/using-regions-availability-zones.html)
 
+- [AWS Tag Editor](https://us-west-2.console.aws.amazon.com/resource-groups/tag-editor/find-resources)
+
 
 GitHub Actions
 --------------

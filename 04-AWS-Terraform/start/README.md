@@ -1465,7 +1465,7 @@ Woo hoo!  That's quite an impressive stack of Terraform you just built.
    terraform destroy --auto-approve --var-file="input.tfvars"
    ```
 
-Yes, it'll likely take a good while to delete the ALB.  While it's deleting, you can proceed to Chapter 4.
+Yes, it'll likely take a good while to delete the ALB.  While it's deleting, you can proceed to Chapter 5.
 
 
 Summary

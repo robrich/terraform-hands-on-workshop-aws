@@ -1,6 +1,6 @@
 module "api_lambda" {
   source  = "app.terraform.io/robrich/lambda/aws"
-  version = "0.0.1"
+  version = "~>0.0.1"
 
   function_name         = local.lambda_name
   description           = "a terraform workshop lambda"

@@ -32,7 +32,7 @@ output "my_gateway_arn" {
 }
 
 output "my_gateway_url" {
-  value = "${aws_api_gateway_deployment.my_gateway.invoke_url}/${aws_api_gateway_resource.root.path_part}"
+  value = "${aws_api_gateway_stage.my_gateway.invoke_url}/${aws_api_gateway_resource.root.path_part}"
   # https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-call-api.html
 }
 

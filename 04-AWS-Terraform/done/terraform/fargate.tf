@@ -23,7 +23,7 @@ resource "aws_ecs_task_definition" "fargate_task" {
         log_driver = "awslogs"
         options = {
           "awslogs-group"         = "ecs/${local.fargate_task_name}"
-          "awslogs-region"        = data.aws_region.current.name
+          "awslogs-region"        = data.aws_region.current.region
           "awslogs-stream-prefix" = "ecs"
         }
       }

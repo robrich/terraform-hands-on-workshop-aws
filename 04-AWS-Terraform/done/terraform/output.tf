@@ -8,7 +8,7 @@ output "aws_account_id" {
 }
 
 output "aws_region" {
-  value = data.aws_region.current.name
+  value = data.aws_region.current.region
 }
 
 output "dynamodb_arn" {
@@ -32,8 +32,9 @@ output "my_gateway_arn" {
 }
 
 output "my_gateway_url" {
-  value = "${aws_api_gateway_deployment.my_gateway.invoke_url}/${aws_api_gateway_resource.root.path_part}"
+  value = "https://${aws_api_gateway_rest_api.my_gateway.id}.execute-api.${data.aws_region.current.region}.amazonaws.com/${aws_api_gateway_stage.my_gateway.stage_name}/${aws_api_gateway_resource.root.path_part}"
   # https://docs.aws.amazon.com/apigateway/latest/developerguide/how-to-call-api.html
+  # convention: https://{api-id}.execute-api.{region}.amazonaws.com/{stage_name}/
 }
 
 output "environment_variables_for_lambda" {

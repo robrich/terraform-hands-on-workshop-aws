@@ -119,6 +119,8 @@ Login to AWS Website
 > [!NOTE]
 > AWS likes to call their cloud portal the "console".  This seems quite confusing.  "Console" typically means a CLI.  But in this case "console" means their website.
 
+If you don't use SSO, here's the login steps:
+
 1. Visit https://console.aws.amazon.com/ in your preferred browser.
 
 2. Login with your username and password.
@@ -128,6 +130,8 @@ Login to AWS Website
    ![AWS Homepage](./img/aws-homepage.png)
 
 ### AWS via SSO
+
+If you use SSO then take the appropriate steps for your company:
 
 1. Visit your corporate SSO login portal
 

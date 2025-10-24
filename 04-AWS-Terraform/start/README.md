@@ -286,7 +286,7 @@ Now that we got our feet wet with Terraform, let's build some AWS resources.
 
        aws = {
          source  = "hashicorp/aws"
-         version = "~> 5.83"
+         version = "~> 6.18"
        }
      }
 
@@ -344,7 +344,7 @@ Now that we got our feet wet with Terraform, let's build some AWS resources.
    }
 
    output "aws_region" {
-     value = data.aws_region.current.name
+     value = data.aws_region.current.region
    }
    ```
 
@@ -354,13 +354,13 @@ Now that we got our feet wet with Terraform, let's build some AWS resources.
 
    If you didn't, you need to authenticate to AWS.
 
-   If you use SSO, try re-running the login command:
+   Are you authenticated to AWS?
 
    ```sh
-   aws sso login --profile training
+   aws sts get-caller-identity --profile training
    ```
 
-   Or try re-exporting the profile environment variable:
+   If you get back an identity here but don't from Terraform, try re-exporting the profile environment variable:
 
    Linux and macOS:
 
@@ -374,7 +374,21 @@ Now that we got our feet wet with Terraform, let's build some AWS resources.
    $env:AWS_PROFILE = "training"
    ```
 
-   If that didn't work, try re-running the setup steps in chapter 0.
+   If you're unauthenticated to the AWS CLI as well, let's get you logged in:
+
+   If you don't use SSO to authenticate to AWS, try re-running the profile configuration command:
+
+   ```sh
+   aws configure --profile training
+   ```
+
+   If you use SSO to authenticate to AWS, try re-running the login command:
+
+   ```sh
+   aws sso login --profile training
+   ```
+
+   If you're still not having success, try re-running the setup steps in chapter 0.
 
 
 DynamoDB
@@ -857,6 +871,7 @@ When we were doing Click-Ops in Chapter 2, we had to do a lot of pieces to get t
 
    - We need to create the 4 pieces: a method, an integration, a method response, and an integration response.
    - We need to create the deployment and the root resource.
+   - We need to create the default stage.
    - We need to create a policy and either reference a built-in role or create a new role.
    - We need to give the API Gateway permission to call the Lambda.
 

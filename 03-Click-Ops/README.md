@@ -155,7 +155,7 @@ The Lambda is part of our cloud-native solution.  Here's the full architecture:
 
    ![Lambda Created](./img/lambda-created.png)
 
-10. On the far right, in the `Upload from` menu, choose `.zip file`.
+10. On the far right, in the `Update` menu, choose `Update from .zip file`.
 
     ![Upload Lambda zip](./img/lambda-upload-zip.png)
 
@@ -301,7 +301,7 @@ The Lambda is part of our cloud-native solution.  Here's the full architecture:
 
 53. Did the Lambda succeed?  Open up the test result details to see.
 
-    **Note:** There's no data in the database, so we'll likely get an HTTP 200, and in the JSON response, an empty `data` section and `"valid":false`.
+    **Note:** There's no data in the database, so we'll likely get an HTTP 404, and in the JSON response, an empty `data` section and `"valid":false`.
 
     **Tip:** Did you get a permission error?  Double-check the Lambda is assigned to the role, the role is assigned to the policy, and the policy has both the correct permissions, and the correct DynamoDB table ARN followed by `/*`.
 
